@@ -13,4 +13,9 @@ const create = async (req: Request, res: Response) => {
   return res.status(201).json(serviceResponse.data);
 };
 
-export default { create };
+const getAll = async (_req: Request, res: Response) => {
+  const serviceResponse = await productService.getAll();
+  return res.status(200).json(serviceResponse.data);
+};
+
+export default { create, getAll };
