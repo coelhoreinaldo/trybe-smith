@@ -55,6 +55,12 @@ const allProducts = [
     price: "15 peças de ouro",
     orderId: 3,
   },
+  {
+    id: 5,
+    name: "Harpa de Dagda",
+    price: "15 peças de ouro",
+    orderId: 3,
+  },
 ];
 
 export default {
