@@ -4,7 +4,7 @@ import { ServiceResponse } from '../types/ServiceResponse';
 
 const validateParams = ({ name, orderId, price }: ProductInputtableTypes): string | null => {
   if (!name) return 'name is required';
-  if (!orderId) return 'orderId is required';
+  if (!orderId && orderId !== 0) return 'orderId is required';
   if (!price) return 'price is required';
   return null;
 };
