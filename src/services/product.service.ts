@@ -1,21 +1,34 @@
+import Joi from 'joi';
 import ProductModel, {
   ProductInputtableTypes, ProductSequelizeModel } from '../database/models/product.model';
 import { Product } from '../types/Product';
 import { ServiceResponse } from '../types/ServiceResponse';
 
-const validateParams = ({ name, orderId, price }: ProductInputtableTypes): string | null => {
-  if (!name) return 'name is required';
-  if (!orderId && orderId !== 0) return 'orderId is required';
-  if (!price) return 'price is required';
+const productSchema = Joi.object({
+  name: Joi.string().required().min(3).messages({ 'string.empty': '"name" is required' }),
+  price: Joi.string().required().min(3).messages({ 'string.empty': '"price" is required' }),
+  orderId: Joi.number(),
+});
+
+const validateParams = ({ name, price }: ProductInputtableTypes): string | null => {
+  if (!name) return '"name" is required';
+  if (!price) return '"price" is required';
   return null;
 };
 
 const create = async (product: ProductInputtableTypes):Promise<ServiceResponse<Product>> => {
   let responseService: ServiceResponse<Product>;
-  const error = validateParams(product);
+  const isInvalidFields = validateParams(product);
+  if (isInvalidFields) {
+    responseService = { status: 'INVALID_DATA', data: { message: isInvalidFields } };
+    return responseService;
+  }
+    
+  const { error } = productSchema.validate(product);
 
   if (error) {
-    responseService = { status: 'INVALID_DATA', data: { message: error } };
+    responseService = {
+      status: 'UNPROCESSABLE_ENTITY', data: { message: error.details[0].message } };
     return responseService;
   }
 

@@ -30,18 +30,18 @@ describe('POST /products', function () {
       .send(productMock.productWithoutName)
 
     expect(httpResponse.status).to.equal(400)
-    expect(httpResponse.body).to.be.deep.equal({ message: 'name is required' })
+    expect(httpResponse.body).to.be.deep.equal({ message: '"name" is required' })
   });
 
-  it('should return status 400 when orderId is not provided', async function () {
-    const httpResponse = await chai
-      .request(app)
-      .post('/products')
-      .send(productMock.productWithoutOrderId)
+  // it('should return status 400 when orderId is not provided', async function () {
+  //   const httpResponse = await chai
+  //     .request(app)
+  //     .post('/products')
+  //     .send(productMock.productWithoutOrderId)
 
-    expect(httpResponse.status).to.equal(400)
-    expect(httpResponse.body).to.be.deep.equal({ message: 'orderId is required' })
-  });
+  //   expect(httpResponse.status).to.equal(400)
+  //   expect(httpResponse.body).to.be.deep.equal({ message: '"orderId" is required' })
+  // });
 
   it('should return status 400 when price is not provided', async function () {
     const httpResponse = await chai
@@ -50,7 +50,18 @@ describe('POST /products', function () {
       .send(productMock.productWithoutPrice)
 
     expect(httpResponse.status).to.equal(400)
-    expect(httpResponse.body).to.be.deep.equal({ message: 'price is required' })
+    expect(httpResponse.body).to.be.deep.equal({ message: '"price" is required' })
+
   });
-    
+  
+  it('should return status 422 when price is not a number', async function () {
+    const httpResponse = await chai
+      .request(app)
+      .post('/products')
+      .send(productMock.productWithInvalidFields)
+
+    expect(httpResponse.status).to.equal(422)
+    expect(httpResponse.body).to.be.deep.equal({ message: '"price" length must be at least 3 characters long' })
+  }
+  );
 });

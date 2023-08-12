@@ -24,6 +24,12 @@ const productWithoutPrice = {
   price: "",
 };
 
+const productWithInvalidFields = {
+  name: "Lança de Athena",
+  orderId: 3,
+  price: "7",
+}
+
 const allProducts = [
   {
     id: 1,
@@ -68,5 +74,6 @@ export default {
   productWithoutName,
   productWithoutOrderId,
   productWithoutPrice,
+  productWithInvalidFields,
   allProducts
 };
