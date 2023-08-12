@@ -7,6 +7,7 @@ import jwtFunctions from '../utils/jwtFunctions';
 
 async function verifyLogin(login: Login): Promise<ServiceResponse<Token>> {
   const foundUser = await UserModel.findOne({ where: { username: login.username } });
+  
   if (!foundUser || !bcrypt.compareSync(login.password, foundUser.dataValues.password)) {
     return { status: 'UNAUTHORIZED', data: { message: 'Username or password invalid' } };
   }

@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 describe('GET /products', function () { 
   beforeEach(function () { sinon.restore(); });
 
-  it('should send status 200 and list all products', async function () {
+  it('should return status 200 and list all products', async function () {
     const products = productMock.allProducts.map(productData => ProductModel.build(productData));
     sinon.stub(ProductModel, 'findAll').resolves(products);
 
