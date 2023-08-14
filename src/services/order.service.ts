@@ -1,8 +1,10 @@
 import sequelize from '../database/models/index';
 import OrderModel, { OrderSequelizeModel } from '../database/models/order.model';
 import ProductModel from '../database/models/product.model';
+import UserModel from '../database/models/user.model';
 import { OrderBody } from '../types/Order';
 import { ServiceResponse } from '../types/ServiceResponse';
+// import { orderSchema } from '../validations/schemas';
 
 const getAll = async (): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
   const allOrders = await OrderModel.findAll({
@@ -23,26 +25,32 @@ const getAll = async (): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
   return { status: 'SUCCESSFUL', data: allOrders };
 };
 
-const create = async ({
-  productIds, userId }:OrderBody): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
-  if (!productIds || !userId) { return { status: 'INVALID_DATA', data: { message: 'deu ruim' } }; }
+// const verifyErrorType = (message:string) :string => 
+//   (message.includes('must') ? 'UNPROCESSABLE_ENTITY' : 'INVALID_DATA');
 
-  const result = await sequelize.transaction(async (t) => {
-    const newOrder = await OrderModel.create({ userId }, { transaction: t });
-    const productsOrder = productIds.map(async (e) => {
+const create = async (order:OrderBody): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
+  // const { error } = orderSchema.validate(order);
+  
+  // if (error) {
+  //   return { status: verifyErrorType(error.details[0].message), data: { message: error.details[0].message } };
+  // }
+  const foundUser = await UserModel.findByPk(order.userId);
+  if (!foundUser) { return { status: 'NOT_FOUND', data: { message: '"userId" not found' } }; }
+
+  const { dataValues } = await sequelize.transaction(async (t) => {
+    const newOrder = await OrderModel.create({ userId: order.userId }, { transaction: t });
+    const productsOrder = order.productIds.map(async (e) => {
       const updatedProducts = ProductModel.update({
         orderId: newOrder.dataValues.id, 
       }, { where: { id: e } });
-
       return updatedProducts;
     });    
     await Promise.all(productsOrder);
     return newOrder;
   });
-
-  console.log(result);
-
-  return { status: 'SUCCESSFUL', data: result as any };
+  
+  return { status: 'SUCCESSFUL',
+    data: { userId: dataValues.userId, productIds: order.productIds } as any };
 };
 
 export default { getAll, create };

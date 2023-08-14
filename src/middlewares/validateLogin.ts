@@ -1,12 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import Joi from 'joi';
-
-const loginSchema = Joi.object({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
-}).messages({
-  'any.required': '"username" and "password" are required',
-});
+import { loginSchema } from '../validations/schemas';
 
 const validateLogin = async (req: Request, res: Response, next: NextFunction) => {
   const { error } = loginSchema.validate(req.body);

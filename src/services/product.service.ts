@@ -1,14 +1,8 @@
-import Joi from 'joi';
 import ProductModel, {
   ProductInputtableTypes, ProductSequelizeModel } from '../database/models/product.model';
 import { Product } from '../types/Product';
 import { ServiceResponse } from '../types/ServiceResponse';
-
-const productSchema = Joi.object({
-  name: Joi.string().required().min(3).messages({ 'string.empty': '"name" is required' }),
-  price: Joi.string().required().min(3).messages({ 'string.empty': '"price" is required' }),
-  orderId: Joi.number(),
-});
+import { productSchema } from '../validations/schemas';
 
 const validateParams = ({ name, price }: ProductInputtableTypes): string | null => {
   if (!name) return '"name" is required';
