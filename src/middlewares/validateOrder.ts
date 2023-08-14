@@ -8,9 +8,6 @@ const validateOrder = async (req: Request, res: Response, next: NextFunction) =>
   const { error } = orderSchema.validate(req.body);
 
   if (error) {
-    console.log(error.details);
-    console.log(error);
-    
     return res.status(verifyErrorType(error.details[0].message))
       .json({ message: error.details[0].message });
   }
