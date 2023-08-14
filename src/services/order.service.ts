@@ -24,7 +24,7 @@ const getAll = async (): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
   return { status: 'SUCCESSFUL', data: allOrders };
 };
 
-const create = async (order:OrderBody): Promise<ServiceResponse<OrderSequelizeModel[]>> => {
+const create = async (order:OrderBody): Promise<ServiceResponse<OrderBody>> => {
   const foundUser = await UserModel.findByPk(order.userId);
   
   if (!foundUser) { return { status: 'NOT_FOUND', data: { message: '"userId" not found' } }; }
@@ -42,7 +42,7 @@ const create = async (order:OrderBody): Promise<ServiceResponse<OrderSequelizeMo
   });
 
   return { status: 'SUCCESSFUL',
-    data: { userId: dataValues.userId, productIds: order.productIds } as any };
+    data: { userId: dataValues.userId, productIds: order.productIds } };
 };
 
 export default { getAll, create };

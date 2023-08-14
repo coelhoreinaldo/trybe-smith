@@ -31,8 +31,6 @@ const existingUserInDb = {
     password: hashedPassword
   };
 
-const validToken = 'validToken'
-
 export default {
   validLogin,
   loginWithoutUsername,
@@ -40,5 +38,4 @@ export default {
   loginWithInvalidUsername,
   loginWithInvalidPassword,
   existingUserInDb,
-  validToken,
 }

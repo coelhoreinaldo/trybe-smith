@@ -14,6 +14,8 @@ describe('POST /orders', function () {
   beforeEach(function () { sinon.restore(); });
 
   it('should return status 201 with the new order created', async function () {
+    // const userInstance = UserModel.build(loginMock.existingUserInDb);
+    // sinon.stub(UserModel, 'findOne').resolves(userInstance);
     const result = await chai.request(app).post('/login').send({
       username: 'Hagar',
       password: 'terrível',
@@ -29,7 +31,6 @@ describe('POST /orders', function () {
 
     const updateProductsReturn = ProductModel.bulkBuild(orderMock.toUpdateProducts as any);
     
-    // // const updateProductsReturn = orderMock.toUpdateProducts.map(productData => ProductModel.build(productData));
     sinon.stub(ProductModel, 'update').resolves(updateProductsReturn as any);
 
     const httpResponse = await chai.request(app).post('/orders').send(orderMock.validOrderBody).set('authorization', `Bearer ${token}`);
@@ -39,10 +40,11 @@ describe('POST /orders', function () {
   });
 
   it('should return status 404 when user is not found', async function () {
-    const result = await chai.request(app).post('/login').send({
-      username: 'Hagar',
-      password: 'terrível',
-    });
+    // const userInstance = UserModel.build(loginMock.existingUserInDb);
+    // sinon.stub(UserModel, 'findOne').resolves(userInstance);
+
+    const result = await chai.request(app).post('/login').send(loginMock.validLogin);
+
     const token = result.body.token;
   
     sinon.stub(UserModel, 'findByPk').resolves(null);
