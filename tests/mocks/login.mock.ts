@@ -1,8 +1,12 @@
-const hashedPassword = '$10$2DaI./DdKB85Yk5JRJJShOlBoSPRySzqrV4qP/zkQ5POw5HLzNAKi'
+import bcrypt from 'bcryptjs';
+
+const SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS || 10;
+
+const hashedPassword = bcrypt.hashSync('1234', SALT_ROUNDS)
 
 const validLogin = {
   username: 'Hagar',
-  password: 'terrível',
+  password: '1234',
 };
 
 const loginWithoutUsername = {

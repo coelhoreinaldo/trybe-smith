@@ -44,14 +44,14 @@ describe('POST /login', function () {
     expect(httpResponse.body.message).to.equal('Username or password invalid');
   });
 
-  it.skip('should return 200 when login is successful', async function () {
+  it('should return 200 when login is successful', async function () {
     const userInstance = UserModel.build(loginMock.existingUserInDb);
     sinon.stub(UserModel, 'findOne').resolves(userInstance);
 
     const httpResponse = await 
     chai.request(app).post('/login').send(loginMock.validLogin);
 
-    expect(httpResponse.body).to.have.key('token');
     expect(httpResponse.status).to.equal(200);
+    expect(httpResponse.body).to.have.key('token');
   });
 });

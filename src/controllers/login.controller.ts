@@ -8,7 +8,7 @@ async function login(req: Request, res: Response) {
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);  
   }
   
-  res.status(200).json(serviceResponse.data);
+  return res.status(200).json(serviceResponse.data);
 }
 
 export default {

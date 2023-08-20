@@ -14,11 +14,11 @@ describe('POST /orders', function () {
   beforeEach(function () { sinon.restore(); });
 
   it('should return status 201 with the new order created', async function () {
-    // const userInstance = UserModel.build(loginMock.existingUserInDb);
-    // sinon.stub(UserModel, 'findOne').resolves(userInstance);
+    const userInstance = UserModel.build(loginMock.existingUserInDb);
+    sinon.stub(UserModel, 'findOne').resolves(userInstance);
     const result = await chai.request(app).post('/login').send({
       username: 'Hagar',
-      password: 'terrível',
+      password: '1234',
     });
     const token = result.body.token;
   
@@ -40,8 +40,8 @@ describe('POST /orders', function () {
   });
 
   it('should return status 404 when user is not found', async function () {
-    // const userInstance = UserModel.build(loginMock.existingUserInDb);
-    // sinon.stub(UserModel, 'findOne').resolves(userInstance);
+    const userInstance = UserModel.build(loginMock.existingUserInDb);
+    sinon.stub(UserModel, 'findOne').resolves(userInstance);
 
     const result = await chai.request(app).post('/login').send(loginMock.validLogin);
 

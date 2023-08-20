@@ -9,8 +9,12 @@ async function verifyLogin(login: Login): Promise<ServiceResponse<Token>> {
   const foundUser = await UserModel.findOne({ where: { username: login.username } });
   
   if (!foundUser || !bcrypt.compareSync(login.password, foundUser.dataValues.password)) {
+    if (foundUser?.dataValues.password) {
+      console.log('is equal:', bcrypt.compareSync(login.password, foundUser?.dataValues.password));
+    }
     return { status: 'UNAUTHORIZED', data: { message: 'Username or password invalid' } };
   }
+  // console.log('is equal:', bcrypt.compareSync(login.password, foundUser?.dataValues.password));
 
   const { id, username } = foundUser.dataValues;
 
